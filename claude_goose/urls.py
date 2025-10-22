@@ -15,8 +15,27 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.conf import settings
+from ai_integration import api_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    
+    # API endpoints
+    path('api/status/', api_views.status_view, name='api-status'),
+    path('api/analyze-code/', api_views.analyze_code_view, name='analyze-code'),
+    path('api/generate-tasks/', api_views.generate_tasks_view, name='generate-tasks'),
+    path('api/automate-task/', api_views.automate_task_view, name='automate-task'),
+    path('api/review-code/', api_views.review_code_view, name='review-code'),
+    
+    # REST Framework
+    path('api-auth/', include('rest_framework.urls')),
 ]
+
+# Debug toolbar (only in DEBUG mode)
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
